@@ -43,6 +43,8 @@
             color: var(--text-main);
             height: 300vh;
             touch-action: pan-y;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         /* Top gradient mask */
@@ -86,10 +88,10 @@
 
         .section.left { align-self: flex-start; text-align: left; }
         .section.right { align-self: flex-end; text-align: right; margin-right: 5%; }
-        .section.center { align-self: center; text-align: center; }
+        .section.center { align-self: center; text-align: center; width: 100%; }
 
         h1 {
-            font-size: clamp(2.5rem, 10vw, 6rem);
+            font-size: clamp(2.2rem, 8vw, 6rem);
             margin: 0;
             letter-spacing: -3px;
             text-transform: uppercase;
@@ -209,7 +211,7 @@
 
         <section class="section center">
             <h1>Digital<br>Craftsmanship</h1>
-            <p class="tagline" style="opacity: 0.2;">Est. 2024</p>
+            <p class="tagline" style="opacity: 0.2;">Est. 2026</p>
         </section>
     </div>
 
@@ -303,9 +305,7 @@
                 const model = gltf.scene;
                 
                 model.traverse((child) => {
-                    // Match any object whose name starts with Sphere
                     if (child.name.startsWith("Sphere")) {
-                        // We only move the "root" spheres (those that don't have a Sphere parent)
                         const isRootSphere = !child.parent || !child.parent.name.startsWith("Sphere");
                         
                         if (isRootSphere || child.name === "Sphere004") {
@@ -349,7 +349,7 @@
             requestAnimationFrame(animate);
             controls.update();
 
-            const descendAmount = 10.0; // Slightly more as requested
+            const descendAmount = 10.0;
             const lerpSpeed = 0.05;
 
             targetSpheres.forEach(sphere => {
