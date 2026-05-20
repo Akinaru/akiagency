@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AkiAgency | Interactive Web Creation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --electric-cyan: #00f2ff;
+            --electric-magenta: #ff00ff;
+            --text-main: #ffffff;
+        }
+
+        html.lenis {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            font-family: 'Unbounded', sans-serif;
+            background-color: #050505;
+            color: var(--text-main);
+            height: 300vh;
+        }
+
+        /* Top gradient mask */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 35vh; /* Slightly larger gradient */
+            background: linear-gradient(to bottom, rgba(5, 5, 5, 1) 0%, rgba(5, 5, 5, 0) 100%);
+            z-index: 15;
+            pointer-events: none;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .ui-overlay {
+            position: relative;
+            width: 100%;
+            padding: 25vh 5% 20vh 5%; /* Increased top padding from 10vh to 25vh */
+            box-sizing: border-box;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 40vh;
+        }
+
+        .section {
+            max-width: 600px;
+            opacity: 1;
+        }
+
+        .section.left { align-self: flex-start; text-align: left; }
+        .section.right { align-self: flex-end; text-align: right; margin-right: 5%; }
+        .section.center { align-self: center; text-align: center; }
+
+        h1 {
+            font-size: clamp(2.5rem, 10vw, 6rem);
+            margin: 0;
+            letter-spacing: -3px;
+            text-transform: uppercase;
+            font-weight: 700;
+            line-height: 0.9;
+            color: var(--electric-cyan);
+            text-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
+        }
+
+        .section.center h1 {
+            color: var(--electric-magenta);
+            text-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            margin-top: 1rem;
+            opacity: 0.8;
+            letter-spacing: 1px;
+            color: var(--text-main);
+        }
+
+        .status-text {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--electric-magenta);
+            margin-bottom: 1rem;
+            display: block;
+            font-weight: 700;
+        }
+
+        .services {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 2rem;
+        }
+
+        .service-item {
+            font-size: clamp(1rem, 4vw, 2rem);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            color: var(--electric-cyan);
+            opacity: 0.6;
+            transition: all 0.5s ease;
+        }
+
+        .service-item:hover {
+            opacity: 1;
+            text-shadow: 0 0 15px rgba(0, 242, 255, 0.8);
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 1;
+            font-weight: 300;
+        }
+
+        .construction-note {
+            font-size: 0.9rem;
+            opacity: 0.4;
+            font-style: italic;
+        }
+
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            transition: opacity 0.5s ease;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="ui-overlay">
+        <section class="section left">
+            <h1>AkiAgency</h1>
+            <p class="tagline">The next dimension of experiences.</p>
+        </section>
+
+        <section class="section right">
+            <p class="description">
+                We blend technical excellence with artistic vision to create immersive digital worlds that push the boundaries of the traditional web.
+            </p>
+            <p class="construction-note">Site currently under construction. More coming soon.</p>
+        </section>
+
+        <section class="section left">
+            <div class="services">
+                <div class="service-item">3D Immersive Worlds</div>
+                <div class="service-item">High-End Interaction</div>
+                <div class="service-item">Premium Web Design</div>
+            </div>
+        </section>
+
+        <section class="section center">
+            <h1>Digital<br>Craftsmanship</h1>
+            <p class="tagline" style="opacity: 0.2;">Est. 2024</p>
+        </section>
+    </div>
+
+    <div id="canvas-container"></div>
+
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script> 
+    <script type="module">
+        import * as THREE from 'three';
+        import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+        import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
+        // Lenis Setup
+        const lenis = new Lenis()
+
+        function raf(time) {
+            lenis.raf(time)
+            requestAnimationFrame(raf)
+        }
+
+        requestAnimationFrame(raf)
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        // scene.background = new THREE.Color(0x050505); // Transparent background to see HTML behind
+        
+        // Camera setup
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+        camera.position.set(1.08, 0.00, 27.74);
+        camera.rotation.set(-0.17, 0.03, 0.01);
+
+        // Renderer setup - Optimized with alpha for transparency
+        const renderer = new THREE.WebGLRenderer({ 
+            antialias: true,
+            alpha: true,
+            powerPreference: "high-performance"
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for perf
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // Controls
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.5;
+        controls.enableRotate = false; // Disable manual rotation
+        controls.enableZoom = false;   // Disable manual zoom
+        controls.enablePan = false;    // Disable manual panning
+        controls.maxPolarAngle = Math.PI / 2;
+
+        // Acceleration system
+        let isAccelerating = false;
+        const baseRotateSpeed = 0.5;
+        const acceleratedRotateSpeed = 5.0;
+
+        window.addEventListener('mousedown', () => {
+            isAccelerating = true;
+            controls.autoRotateSpeed = acceleratedRotateSpeed;
+            // Dispatch custom event for future use
+            window.dispatchEvent(new CustomEvent('acceleration-start'));
+        });
+
+        window.addEventListener('mouseup', () => {
+            isAccelerating = false;
+            controls.autoRotateSpeed = baseRotateSpeed;
+            // Dispatch custom event for future use
+            window.dispatchEvent(new CustomEvent('acceleration-stop'));
+        });
+
+        // Simplified Lighting for Perf
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+        scene.add(ambientLight);
+
+        const sunLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        sunLight.position.set(10, 20, 10);
+        scene.add(sunLight);
+
+        // Loader
+        const loader = new GLTFLoader();
+        const loadingScreen = document.getElementById('loader');
+
+        loader.load(
+            'space_boi/scene.gltf',
+            (gltf) => {
+                const model = gltf.scene;
+                
+                // Traverse to optimize meshes
+                model.traverse((child) => {
+                    if (child.isMesh) {
+                        child.castShadow = false;
+                        child.receiveShadow = false;
+                        child.frustumCulled = true; // Optimization
+                        if (child.material) {
+                            child.material.precision = 'lowp'; // Lower precision for speed
+                        }
+                    }
+                });
+
+                // Compute bounding box to normalize scale
+                const box = new THREE.Box3().setFromObject(model);
+                const size = box.getSize(new THREE.Vector3());
+                const center = box.getCenter(new THREE.Vector3());
+
+                // Scale model to a fixed size (e.g., 100 units wide)
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const scale = 100 / maxDim;
+                model.scale.setScalar(scale);
+
+                // Center the scaled model
+                model.position.x = -center.x * scale;
+                model.position.y = -center.y * scale;
+                model.position.z = -center.z * scale;
+
+                scene.add(model);
+
+                // Adjust camera and controls (already set earlier, but ensuring target is 0)
+                controls.target.set(0, 0, 0);
+                controls.update();
+
+                // Hide loader
+                loadingScreen.classList.add('hidden');
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+            },
+            (error) => {
+                console.error('An error happened', error);
+                // Even on error, hide loader so user can see UI
+                loadingScreen.classList.add('hidden');
+            }
+        );
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
